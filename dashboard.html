@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HNB Internal – Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0f1b33;--mu:#6b7791;--bd:#e3e8f1;--bg:#f4f6fb;--gold:#f5b800;--navy:#0f1b33;--navy2:#16264a}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Plus Jakarta Sans',system-ui,Segoe UI,Arial,sans-serif;color:var(--ink);background:var(--bg);display:flex;min-height:100vh}
+aside{width:240px;flex:none;background:linear-gradient(180deg,var(--navy),var(--navy2));color:#fff;padding:22px 14px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.logo{font-weight:800;font-size:19px;padding:0 10px 22px}.logo b{background:var(--gold);color:#201800;padding:2px 8px;border-radius:7px;margin-right:8px}
+nav a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:11px;color:#b7c3de;text-decoration:none;font-size:14px;font-weight:600;margin-bottom:3px;cursor:pointer}
+nav a:hover{background:rgba(255,255,255,.07);color:#fff}
+nav a.on{background:rgba(245,184,0,.16);color:var(--gold)}
+nav i{font-style:normal;width:20px;text-align:center}
+.sp{flex:1}
+.me{display:flex;align-items:center;gap:10px;padding:12px;border-top:1px solid rgba(255,255,255,.1);font-size:13px}
+.av{width:36px;height:36px;border-radius:50%;background:var(--gold);color:#201800;font-weight:800;display:grid;place-items:center;flex:none}
+.me div{min-width:0}.me b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.me small{color:#8d9bbd;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.col{flex:1;min-width:0;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:14px;padding:14px 28px;background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:4}
+.search{flex:1;max-width:420px;padding:10px 14px;border:1px solid var(--bd);border-radius:11px;background:var(--bg);font:inherit;font-size:14px;outline:none}
+.search:focus{border-color:var(--gold)}
+.btn{border:1px solid var(--bd);background:#fff;border-radius:11px;padding:9px 14px;font:inherit;font-weight:600;font-size:13px;cursor:pointer;color:var(--ink)}
+.btn:hover{border-color:var(--gold)}
+main{padding:28px;max-width:1200px;width:100%}
+h1{font-size:26px;margin:0 0 4px}.sub{color:var(--mu);font-size:14px;margin:0 0 24px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
+.card{background:#fff;border:1px solid var(--bd);border-radius:16px;padding:20px}
+.kpi small{color:var(--mu);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.kpi .v{font-size:30px;font-weight:800;margin:8px 0 2px;color:#c3cbdc}.kpi .t{color:var(--mu);font-size:12px}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.card h3{margin:0 0 14px;font-size:15px}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:230px;color:var(--mu);font-size:13px;gap:6px}
+.empty .ic{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#fff4cc,#f1f4fb);display:grid;place-items:center;font-size:26px;margin-bottom:6px}
+.empty b{color:var(--ink);font-size:14px}
+@media(max-width:900px){aside{display:none}.grid{grid-template-columns:1fr}header,main{padding-left:16px;padding-right:16px}}
+</style></head>
+<body>
+<aside>
+  <div class="logo"><b>HNB</b>Internal</div>
+  <nav>
+    <a class="on"><i>🏠</i>Dashboard</a>
+    <a><i>📋</i>Tasks</a>
+    <a><i>👥</i>Teams</a>
+    <a><i>📊</i>Reports</a>
+    <a><i>📁</i>Documents</a>
+    <a><i>🔔</i>Notifications</a>
+    <a><i>⚙️</i>Settings</a>
+  </nav>
+  <div class="sp"></div>
+  <div class="me"><div class="av" id="av">U</div><div><b id="nm">User</b><small id="em"></small></div></div>
+</aside>
+
+<div class="col">
+  <header>
+    <input class="search" placeholder="Search…">
+    <span style="flex:1"></span>
+    <button class="btn" id="out">Logout</button>
+  </header>
+  <main>
+    <h1 id="hello">Welcome</h1>
+    <p class="sub" id="date"></p>
+
+    <div class="kpis">
+      <div class="card kpi"><small>Total items</small><div class="v">—</div><div class="t">No data yet</div></div>
+      <div class="card kpi"><small>Pending</small><div class="v">—</div><div class="t">No data yet</div></div>
+      <div class="card kpi"><small>Completed</small><div class="v">—</div><div class="t">No data yet</div></div>
+      <div class="card kpi"><small>Alerts</small><div class="v">—</div><div class="t">No data yet</div></div>
+    </div>
+
+    <div class="grid">
+      <div class="card"><h3>Overview</h3><div class="empty"><div class="ic">📈</div><b>Nothing to show yet</b>Charts and activity will appear here.</div></div>
+      <div class="card"><h3>Recent activity</h3><div class="empty"><div class="ic">🕘</div><b>No activity</b>Updates will show up here.</div></div>
+    </div>
+  </main>
+</div>
+<script>
+  const raw = sessionStorage.getItem('hnbStaff');
+  if (!raw) location.replace('login.html');
+  const u = JSON.parse(raw || '{}'), $ = id => document.getElementById(id);
+  const h = new Date().getHours();
+  $('hello').textContent = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', ' + (u.name || 'there');
+  $('date').textContent = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  $('nm').textContent = u.name || 'User'; $('em').textContent = u.email || '';
+  $('av').textContent = (u.name || 'U').charAt(0).toUpperCase();
+  $('out').onclick = () => { sessionStorage.removeItem('hnbStaff'); location.replace('login.html'); };
+</script>
+</body></html>

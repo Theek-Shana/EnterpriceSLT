@@ -199,14 +199,14 @@ h4{margin:18px 0 8px;font-size:13px}
 <script>
   /* ---------- session guard + header (unchanged behaviour) ---------- */
   const raw = sessionStorage.getItem('hnbStaff');
-  if (!raw) location.replace('index.html');
+  if (!raw) location.replace('login.html');
   const u = JSON.parse(raw || '{}'), $ = id => document.getElementById(id);
   const h = new Date().getHours();
   $('hello').textContent = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', ' + (u.name || 'there');
   $('date').textContent = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   $('nm').textContent = u.name || 'User'; $('em').textContent = u.email || '';
   $('av').textContent = (u.name || 'U').charAt(0).toUpperCase();
-  $('out').onclick = () => { sessionStorage.removeItem('hnbStaff'); location.replace('index.html'); };
+  $('out').onclick = () => { sessionStorage.removeItem('hnbStaff'); location.replace('login.html'); };
 
   /* ---------- navigation ---------- */
   document.querySelectorAll('#nav a[data-v]').forEach(a => a.onclick = () => {

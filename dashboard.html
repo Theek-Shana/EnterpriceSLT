@@ -3,7 +3,7 @@
 <title>HNB Internal – Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#0f1b33;--mu:#6b7791;--bd:#e3e8f1;--bg:#f4f6fb;--gold:#f5b800;--navy:#0f1b33;--navy2:#16264a}
+:root{--ink:#0f1b33;--mu:#6b7791;--bd:#e3e8f1;--bg:#f4f6fb;--gold:#f5b800;--navy:#0f1b33;--navy2:#16264a;--ok:#0f8a5f;--okbg:#e2f6ee;--no:#c0392b;--nobg:#fdeaea;--nu:#8a6d00;--nubg:#fff4cc}
 *{box-sizing:border-box}
 body{margin:0;font-family:'Plus Jakarta Sans',system-ui,Segoe UI,Arial,sans-serif;color:var(--ink);background:var(--bg);display:flex;min-height:100vh}
 aside{width:240px;flex:none;background:linear-gradient(180deg,var(--navy),var(--navy2));color:#fff;padding:22px 14px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
@@ -22,24 +22,73 @@ header{display:flex;align-items:center;gap:14px;padding:14px 28px;background:#ff
 .search:focus{border-color:var(--gold)}
 .btn{border:1px solid var(--bd);background:#fff;border-radius:11px;padding:9px 14px;font:inherit;font-weight:600;font-size:13px;cursor:pointer;color:var(--ink)}
 .btn:hover{border-color:var(--gold)}
+.btn.pri{background:var(--gold);border-color:var(--gold);color:#201800}
+.btn:disabled{opacity:.6;cursor:wait}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 main{padding:28px;max-width:1200px;width:100%}
 h1{font-size:26px;margin:0 0 4px}.sub{color:var(--mu);font-size:14px;margin:0 0 24px}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
 .card{background:#fff;border:1px solid var(--bd);border-radius:16px;padding:20px}
 .kpi small{color:var(--mu);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
 .kpi .v{font-size:30px;font-weight:800;margin:8px 0 2px;color:#c3cbdc}.kpi .t{color:var(--mu);font-size:12px}
+.kpi .v.live{color:var(--ink)}
 .grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}
 .card h3{margin:0 0 14px;font-size:15px}
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:230px;color:var(--mu);font-size:13px;gap:6px}
 .empty .ic{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#fff4cc,#f1f4fb);display:grid;place-items:center;font-size:26px;margin-bottom:6px}
 .empty b{color:var(--ink);font-size:14px}
-@media(max-width:900px){aside{display:none}.grid{grid-template-columns:1fr}header,main{padding-left:16px;padding-right:16px}}
+.view{display:none}.view.on{display:block}
+
+/* connection panel */
+.cfg{display:grid;grid-template-columns:1.3fr 1fr 1fr 1.6fr auto;gap:10px;align-items:end}
+.cfg label{display:block;font-size:12px;font-weight:600;color:var(--mu);margin-bottom:5px}
+.cfg input,.cfg select{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;font:inherit;font-size:13px;background:#fff;outline:none}
+.cfg input:focus,.cfg select:focus{border-color:var(--gold)}
+.note{font-size:12px;color:var(--mu);margin:12px 0 0;line-height:1.5}
+.msg{margin-top:14px;padding:12px 14px;border-radius:11px;font-size:13px;line-height:1.5;display:none}
+.msg.err{display:block;background:var(--nobg);color:var(--no)}
+.msg.ok{display:block;background:var(--okbg);color:var(--ok)}
+
+/* tabs */
+.tabs{display:flex;gap:6px;margin:20px 0 14px;border-bottom:1px solid var(--bd)}
+.tabs button{border:0;background:none;font:inherit;font-weight:600;font-size:13px;color:var(--mu);padding:10px 14px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button.on{color:var(--ink);border-color:var(--gold)}
+.pane{display:none}.pane.on{display:block}
+
+/* consents table */
+.tools{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.tools .search{max-width:300px}
+.chips{display:flex;gap:6px}
+.chip{border:1px solid var(--bd);background:#fff;border-radius:99px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;color:var(--mu)}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:12px;color:var(--mu);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--bd);white-space:nowrap}
+td{padding:12px;border-bottom:1px solid var(--bd);vertical-align:top}
+tr.row{cursor:pointer}tr.row:hover td{background:#fafbfe}
+.pill{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;white-space:nowrap}
+.pill.ok{background:var(--okbg);color:var(--ok)}.pill.no{background:var(--nobg);color:var(--no)}.pill.nu{background:var(--nubg);color:var(--nu)}
+.who b{display:block}.who small{color:var(--mu)}
+tr.det td{background:#fafbfe;padding:14px 18px}
+.kv{display:grid;grid-template-columns:200px 1fr;gap:6px 14px;font-size:12px}
+.kv span:nth-child(odd){color:var(--mu);font-weight:600}.kv span:nth-child(even){word-break:break-word}
+
+/* inspector */
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:14px}
+.meta div{background:var(--bg);border-radius:11px;padding:12px}
+.meta small{display:block;color:var(--mu);font-size:11px;font-weight:600;margin-bottom:4px}
+.meta b{font-size:13px;word-break:break-all}
+pre{margin:0;background:#0f1b33;color:#d6e0f5;border-radius:12px;padding:16px;font-size:12px;line-height:1.55;overflow:auto;max-height:460px;font-family:ui-monospace,Menlo,Consolas,monospace}
+h4{margin:18px 0 8px;font-size:13px}
+@media(max-width:1000px){.cfg{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){aside{display:none}.grid{grid-template-columns:1fr}header,main{padding-left:16px;padding-right:16px}.cfg{grid-template-columns:1fr}.kv{grid-template-columns:1fr}}
 </style></head>
 <body>
 <aside>
   <div class="logo"><b>HNB</b>Internal</div>
-  <nav>
-    <a class="on"><i>🏠</i>Dashboard</a>
+  <nav id="nav">
+    <a class="on" data-v="dash"><i>🏠</i>Dashboard</a>
+    <a data-v="consents"><i>✅</i>Consents</a>
     <a><i>📋</i>Tasks</a>
     <a><i>👥</i>Teams</a>
     <a><i>📊</i>Reports</a>
@@ -53,7 +102,7 @@ h1{font-size:26px;margin:0 0 4px}.sub{color:var(--mu);font-size:14px;margin:0 0 
 
 <div class="col">
   <header>
-    <input class="search" placeholder="Search…">
+    <input class="search" type="search" name="hdr-search" placeholder="Search…" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
     <span style="flex:1"></span>
     <button class="btn" id="out">Logout</button>
   </header>
@@ -61,28 +110,257 @@ h1{font-size:26px;margin:0 0 4px}.sub{color:var(--mu);font-size:14px;margin:0 0 
     <h1 id="hello">Welcome</h1>
     <p class="sub" id="date"></p>
 
-    <div class="kpis">
-      <div class="card kpi"><small>Total items</small><div class="v">—</div><div class="t">No data yet</div></div>
-      <div class="card kpi"><small>Pending</small><div class="v">—</div><div class="t">No data yet</div></div>
-      <div class="card kpi"><small>Completed</small><div class="v">—</div><div class="t">No data yet</div></div>
-      <div class="card kpi"><small>Alerts</small><div class="v">—</div><div class="t">No data yet</div></div>
-    </div>
+    <!-- DASHBOARD -->
+    <section class="view on" id="v-dash">
+      <div class="kpis">
+        <div class="card kpi"><small>Total consents</small><div class="v" id="k1">—</div><div class="t" id="k1t">Open Consents to load data</div></div>
+        <div class="card kpi"><small>Granted</small><div class="v" id="k2">—</div><div class="t" id="k2t">No data yet</div></div>
+        <div class="card kpi"><small>Withdrawn / declined</small><div class="v" id="k3">—</div><div class="t" id="k3t">No data yet</div></div>
+        <div class="card kpi"><small>Other status</small><div class="v" id="k4">—</div><div class="t" id="k4t">No data yet</div></div>
+      </div>
+      <div class="grid">
+        <div class="card"><h3>Overview</h3><div class="empty"><div class="ic">📈</div><b>Nothing to show yet</b>Charts and activity will appear here.</div></div>
+        <div class="card"><h3>Recent activity</h3><div class="empty"><div class="ic">🕘</div><b>No activity</b>Updates will show up here.</div></div>
+      </div>
+    </section>
 
-    <div class="grid">
-      <div class="card"><h3>Overview</h3><div class="empty"><div class="ic">📈</div><b>Nothing to show yet</b>Charts and activity will appear here.</div></div>
-      <div class="card"><h3>Recent activity</h3><div class="empty"><div class="ic">🕘</div><b>No activity</b>Updates will show up here.</div></div>
-    </div>
+    <!-- CONSENTS -->
+    <section class="view" id="v-consents">
+      <div class="card">
+        <h3>AI CMS connection</h3>
+        <div class="cfg">
+          <div><label for="base">Base URL</label><input id="base" type="url" name="cms-base-url" placeholder="https://your-cms-host" autocomplete="off"></div>
+          <div><label for="path">Consents path</label><input id="path" value="/api/consents" autocomplete="off"></div>
+          <div><label for="hdr">Key sent as</label>
+            <select id="hdr">
+              <option value="Authorization|Bearer ">Authorization: Bearer</option>
+              <option value="x-api-key|">x-api-key</option>
+              <option value="api-key|">api-key</option>
+              <option value="Authorization|">Authorization (raw)</option>
+            </select></div>
+          <div><label for="key">API key</label><input id="key" type="text" name="cms-token-field" placeholder="Paste key" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore readonly onfocus="this.removeAttribute('readonly')" style="-webkit-text-security:disc;text-security:disc"></div>
+          <button class="btn pri" id="go">Fetch consents</button>
+        </div>
+        <p class="note">The key stays in this tab's memory only, so it is gone on refresh. If the browser blocks the request with a CORS error, the CMS has to allow this origin, or the call must go through your backend.</p>
+        <div class="msg" id="msg"></div>
+      </div>
+
+      <div class="tabs" id="tabs">
+        <button class="on" data-p="list">Consents</button>
+        <button data-p="schema">Data fields</button>
+        <button data-p="raw">Raw response</button>
+      </div>
+
+      <div class="pane on" id="p-list">
+        <div class="card">
+          <div class="tools">
+            <input class="search" id="q" placeholder="Filter by name, number, consent…">
+            <div class="chips" id="chips">
+              <span class="chip on" data-s="all">All</span>
+              <span class="chip" data-s="ok">Granted</span>
+              <span class="chip" data-s="no">Withdrawn</span>
+              <span class="chip" data-s="nu">Other</span>
+            </div>
+            <span style="flex:1"></span><small id="count" style="color:var(--mu)"></small>
+          </div>
+          <div class="tw">
+            <table><thead><tr><th>Customer</th><th>Consent</th><th>Status</th><th>Date</th><th>Channel</th></tr></thead>
+            <tbody id="tb"><tr><td colspan="5"><div class="empty"><div class="ic">✅</div><b>No consents loaded</b>Enter the connection details above and fetch.</div></td></tr></tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <div class="pane" id="p-schema">
+        <div class="card">
+          <h3>Fields found in the response</h3>
+          <div class="tw"><table><thead><tr><th>Field</th><th>Type</th><th>Filled</th><th>Sample value</th></tr></thead>
+          <tbody id="sch"><tr><td colspan="4" style="color:var(--mu)">Fetch consents to see which fields come through.</td></tr></tbody></table></div>
+        </div>
+      </div>
+
+      <div class="pane" id="p-raw">
+        <div class="card">
+          <h3>Request and response</h3>
+          <div class="meta">
+            <div><small>Request</small><b id="m-url">—</b></div>
+            <div><small>Key header</small><b id="m-hdr">—</b></div>
+            <div><small>Status</small><b id="m-st">—</b></div>
+            <div><small>Time</small><b id="m-ms">—</b></div>
+            <div><small>Records</small><b id="m-n">—</b></div>
+          </div>
+          <h4>Response body</h4>
+          <pre id="raw">Nothing fetched yet.</pre>
+        </div>
+      </div>
+    </section>
   </main>
 </div>
+
 <script>
+  /* ---------- session guard + header (unchanged behaviour) ---------- */
   const raw = sessionStorage.getItem('hnbStaff');
-  if (!raw) location.replace('login.html');
+  if (!raw) location.replace('index.html');
   const u = JSON.parse(raw || '{}'), $ = id => document.getElementById(id);
   const h = new Date().getHours();
   $('hello').textContent = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', ' + (u.name || 'there');
   $('date').textContent = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   $('nm').textContent = u.name || 'User'; $('em').textContent = u.email || '';
   $('av').textContent = (u.name || 'U').charAt(0).toUpperCase();
-  $('out').onclick = () => { sessionStorage.removeItem('hnbStaff'); location.replace('login.html'); };
+  $('out').onclick = () => { sessionStorage.removeItem('hnbStaff'); location.replace('index.html'); };
+
+  /* ---------- navigation ---------- */
+  document.querySelectorAll('#nav a[data-v]').forEach(a => a.onclick = () => {
+    document.querySelectorAll('#nav a').forEach(x => x.classList.remove('on')); a.classList.add('on');
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
+    $('v-' + a.dataset.v).classList.add('on');
+  });
+  document.querySelectorAll('#tabs button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('#tabs button').forEach(x => x.classList.remove('on')); b.classList.add('on');
+    document.querySelectorAll('.pane').forEach(p => p.classList.remove('on'));
+    $('p-' + b.dataset.p).classList.add('on');
+  });
+
+  /* remember non-secret connection settings */
+  try {
+    const sv = JSON.parse(localStorage.getItem('hnbCms') || '{}');
+    if (sv.base) $('base').value = sv.base;
+    if (sv.path) $('path').value = sv.path;
+    if (sv.hdr) $('hdr').value = sv.hdr;
+  } catch {}
+  $('key').value = '';
+
+  /* ---------- helpers ---------- */
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const mask = k => k.length > 10 ? k.slice(0, 4) + '…' + k.slice(-4) : '••••';
+  const flat = (o, p = '', out = {}) => {
+    for (const [k, v] of Object.entries(o || {})) {
+      const key = p ? p + '.' + k : k;
+      if (v && typeof v === 'object' && !Array.isArray(v)) flat(v, key, out); else out[key] = v;
+    }
+    return out;
+  };
+  const findArray = (o, d = 0) => {
+    if (Array.isArray(o)) return o;
+    if (!o || typeof o !== 'object' || d > 3) return null;
+    for (const k of ['data', 'items', 'consents', 'results', 'records', 'content', 'value'])
+      if (Array.isArray(o[k])) return o[k];
+    for (const v of Object.values(o)) { const r = findArray(v, d + 1); if (r) return r; }
+    return null;
+  };
+  /* pick the first field whose name contains one of the hints */
+  const pick = (f, hints) => {
+    for (const hint of hints) {
+      const k = Object.keys(f).find(x => x.toLowerCase().includes(hint) && f[x] !== null && f[x] !== '');
+      if (k) return f[k];
+    }
+    return '';
+  };
+  const classify = v => {
+    const s = String(v).toLowerCase();
+    if (v === true || /^(true|1|yes|y|granted|accepted|accept|agreed|active|opt.?in|given|approved|allow)/.test(s)) return 'ok';
+    if (v === false || /^(false|0|no|n|revoked|withdrawn|declined|denied|rejected|inactive|opt.?out|expired|cancel)/.test(s)) return 'no';
+    return 'nu';
+  };
+  const label = { ok: 'Granted', no: 'Withdrawn', nu: 'Other' };
+  const fmtDate = v => {
+    if (!v) return '—';
+    const d = new Date(v);
+    return isNaN(d) ? esc(v) : d.toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  };
+
+  /* ---------- fetch ---------- */
+  let rows = [], stat = 'all';
+  const msg = (t, c) => { const m = $('msg'); m.className = 'msg ' + c; m.textContent = t; };
+
+  $('go').onclick = async () => {
+    const base = $('base').value.trim().replace(/\/+$/, ''), path = $('path').value.trim(), key = $('key').value.trim();
+    if (!base || !key) return msg('Enter the base URL and the API key.', 'err');
+    if (!/^https?:\/\//i.test(base)) return msg('The base URL must start with https:// (or http://).', 'err');
+    const url = base + (path.startsWith('/') ? path : '/' + path);
+    try { localStorage.setItem('hnbCms', JSON.stringify({ base, path, hdr: $('hdr').value })); } catch {}
+    const [hn, prefix] = $('hdr').value.split('|');
+    const btn = $('go'); btn.disabled = true; btn.textContent = 'Fetching…';
+    $('m-url').textContent = 'GET ' + url;
+    $('m-hdr').textContent = hn + ': ' + prefix + mask(key);
+    const t0 = performance.now();
+    try {
+      const res = await fetch(url, { headers: { [hn]: prefix + key, 'Accept': 'application/json' } });
+      const text = await res.text();
+      $('m-st').textContent = res.status + ' ' + res.statusText;
+      $('m-ms').textContent = Math.round(performance.now() - t0) + ' ms';
+      let json; try { json = JSON.parse(text); $('raw').textContent = JSON.stringify(json, null, 2); }
+      catch { $('raw').textContent = text || '(empty body)'; }
+      if (!res.ok) return msg('The CMS replied ' + res.status + '. Check the key, the header type and the path. The raw response tab shows what came back.', 'err');
+      if (json === undefined) return msg('The response was not JSON. See the raw response tab.', 'err');
+      const arr = findArray(json);
+      if (!arr) { $('m-n').textContent = '0'; return msg('JSON received, but no list of records was found. See the raw response tab to see its shape.', 'err'); }
+      rows = arr.map(r => (r && typeof r === 'object') ? flat(r) : { value: r });
+      $('m-n').textContent = rows.length;
+      msg('Loaded ' + rows.length + ' record' + (rows.length === 1 ? '' : 's') + ' in ' + Math.round(performance.now() - t0) + ' ms.', 'ok');
+      renderAll();
+    } catch (e) {
+      $('m-st').textContent = 'Failed'; $('m-ms').textContent = '—';
+      msg('The request did not reach the CMS (' + e.message + '). This is usually a CORS block or a wrong base URL. Open the browser console for the exact reason.', 'err');
+    } finally { btn.disabled = false; btn.textContent = 'Fetch consents'; }
+  };
+
+  /* ---------- render ---------- */
+  function normalize(f) {
+    const status = pick(f, ['status', 'state', 'granted', 'accepted', 'consented', 'optin', 'allow', 'active', 'value']);
+    return {
+      f,
+      name: pick(f, ['customername', 'fullname', 'name', 'email']) || pick(f, ['customer', 'user', 'subscriber']),
+      id: pick(f, ['msisdn', 'mobile', 'phone', 'nic', 'customerid', 'userid', 'subscriber', 'id']),
+      consent: pick(f, ['consenttype', 'consentname', 'purpose', 'title', 'consent', 'category', 'type', 'description']),
+      status, cls: classify(status),
+      date: pick(f, ['updated', 'modified', 'grantedat', 'createdat', 'created', 'date', 'time']),
+      channel: pick(f, ['channel', 'source', 'platform', 'origin', 'app'])
+    };
+  }
+
+  function renderAll() {
+    const n = rows.map(normalize);
+    const c = { ok: 0, no: 0, nu: 0 }; n.forEach(r => c[r.cls]++);
+    [['k1', n.length, 'Records returned by the CMS'], ['k2', c.ok, pct(c.ok, n.length)], ['k3', c.no, pct(c.no, n.length)], ['k4', c.nu, pct(c.nu, n.length)]]
+      .forEach(([id, v, t]) => { $(id).textContent = v; $(id).classList.add('live'); $(id + 't').textContent = t; });
+    renderList(n); renderSchema();
+    window._n = n;
+  }
+  const pct = (a, b) => b ? Math.round(a / b * 100) + '% of total' : '—';
+
+  function renderList(n) {
+    const q = $('q').value.trim().toLowerCase();
+    const list = n.filter(r => (stat === 'all' || r.cls === stat) && (!q || JSON.stringify(r.f).toLowerCase().includes(q)));
+    $('count').textContent = list.length + ' of ' + n.length;
+    if (!list.length) { $('tb').innerHTML = '<tr><td colspan="5"><div class="empty"><div class="ic">🔍</div><b>No matching consents</b>Change the filter or search text.</div></td></tr>'; return; }
+    $('tb').innerHTML = list.map((r, i) => `
+      <tr class="row" data-i="${i}">
+        <td class="who"><b>${esc(r.name || r.id || 'Unknown')}</b><small>${esc(r.name && r.id ? r.id : '')}</small></td>
+        <td>${esc(r.consent || '—')}</td>
+        <td><span class="pill ${r.cls}">${esc(typeof r.status === 'boolean' ? label[r.cls] : (r.status || label[r.cls]))}</span></td>
+        <td>${fmtDate(r.date)}</td>
+        <td>${esc(r.channel || '—')}</td>
+      </tr>
+      <tr class="det" id="d${i}" hidden><td colspan="5"><div class="kv">${Object.entries(r.f).map(([k, v]) => `<span>${esc(k)}</span><span>${esc(v === null ? 'null' : v)}</span>`).join('')}</div></td></tr>`).join('');
+    $('tb').querySelectorAll('tr.row').forEach(tr => tr.onclick = () => { const d = $('d' + tr.dataset.i); d.hidden = !d.hidden; });
+  }
+
+  function renderSchema() {
+    const keys = {};
+    rows.forEach(r => Object.entries(r).forEach(([k, v]) => {
+      const e = keys[k] || (keys[k] = { types: new Set(), filled: 0, sample: '' });
+      e.types.add(v === null ? 'null' : Array.isArray(v) ? 'array' : typeof v);
+      if (v !== null && v !== '') { e.filled++; if (e.sample === '') e.sample = typeof v === 'object' ? JSON.stringify(v) : v; }
+    }));
+    $('sch').innerHTML = Object.entries(keys).map(([k, e]) => `
+      <tr><td><b>${esc(k)}</b></td><td>${[...e.types].join(' / ')}</td><td>${e.filled} / ${rows.length}</td><td>${esc(String(e.sample).slice(0, 80))}</td></tr>`).join('')
+      || '<tr><td colspan="4" style="color:var(--mu)">No fields found.</td></tr>';
+  }
+
+  $('q').oninput = () => window._n && renderList(window._n);
+  document.querySelectorAll('#chips .chip').forEach(ch => ch.onclick = () => {
+    document.querySelectorAll('#chips .chip').forEach(x => x.classList.remove('on')); ch.classList.add('on');
+    stat = ch.dataset.s; window._n && renderList(window._n);
+  });
 </script>
 </body></html>
